@@ -99,27 +99,30 @@ client.messageCallback(function(message) {
 
 	if(processedMessage.isCommand)
 	{
-		if(processedMessage.splitedMessage[0] == "모듈" && processedMessage.splitedMessage[1] == "")
+		if(processedMessage.splitedMessage[0] == "모듈")
 		{
-			client.privmsg(message.args[0], modules.length + " modules detected in "+modulepath+". Avaliable modules are: " + modulelist);
-		}
-
-		if(processedMessage.args[1] == "모듈 reload")
-		{
-			client.privmsg(message.args[0], "Reloading all modules....");
-
-			while(modules.length > 0)
+			if(processedMessage.splitedMessage[1] == "reload")
 			{
-				if(typeof(modules[0].unloadCallback) == 'Function')
-				{
-					modules[0].unloadCallback();
-				}				
-				modules.remove(0);
-			}
+				client.privmsg(message.args[0], "Reloading all modules....");
 
-			modLoader();
-			client.privmsg(message.args[0], modules.length + " modules detected in "+modulepath+". Avaliable modules are: " + modulelist);
-			client.privmsg(message.args[0], "Finished module loading.");
+				while(modules.length > 0)
+				{
+					if(typeof(modules[0].unloadCallback) == 'Function')
+					{
+						modules[0].unloadCallback();
+					}
+					modules.remove(0);
+				}
+
+				modLoader();
+
+				client.privmsg(message.args[0], modules.length + " modules detected in "+modulepath+". Avaliable modules are: " + modulelist);
+				client.privmsg(message.args[0], "Finished module loading.");
+			}
+			else
+			{
+				client.privmsg(message.args[0], modules.length + " modules detected in "+modulepath+". Avaliable modules are: " + modulelist);
+			}
 		}
 
 		if(processedMessage.splitedMessage[0] == "명령")
@@ -156,7 +159,7 @@ client.messageCallback(function(message) {
 				{
 					for(j=0; j<modules[i].moduleAPI.moduleCommand.length; j++)
 					{
-						if(modules[i].moduleAPI.moduleCommand[j] == processedMessage.args[1])
+						if(modules[i].moduleAPI.moduleCommand[j] == processedMessage.splitedMessage[0])
 							modules[i].moduleAPI.callBack(processedMessage);
 					}
 				}
@@ -165,7 +168,7 @@ client.messageCallback(function(message) {
 			{
 				client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
 				console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
-				console.log(e.stack);
+				console.log(e);
 			}
 		}
 	}
