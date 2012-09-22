@@ -14,6 +14,9 @@ function messageHandler(message)
 {
 	if(message.command == "KICK")
 	{
-		client.notice(message.nick, "우앵 " + message.args[2] + "라니 너무해!");
+		if(client.nick == message.args[1])
+		{
+			client.notice(message.nick, "우앵 " + message.args[2] + "라니 너무해!");
+		}
 	}
 }

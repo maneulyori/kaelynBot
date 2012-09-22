@@ -9,6 +9,7 @@ function client(server, port, encoding)
 	var self = this;
 	self.client = net.connect(port, server);
 	self.buffer = '';
+	self.nick = '';
 
 	self.client.on('data', function(data) { getMessage(data, self.encoding, self)});
 	console.log("connection succeed to " + server + ":" + port);
@@ -33,6 +34,8 @@ function client(server, port, encoding)
 	{
 		self.raw("USER " + username + " " + hostname + " " + servername + " " + realname);
 		self.raw("NICK " + nick);
+
+		self.nick = nick;
 
 		console.log("registered as " + username);
 	}
