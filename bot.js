@@ -68,8 +68,9 @@ function modLoader()
 		{
 			delete require.cache[require.resolve(modulepath+"/"+modulelist[i])];
 
-			var usermodule = require(modulepath+"/"+modulelist[i]);
 			try {
+				var usermodule = require(modulepath+"/"+modulelist[i]);
+
 				var moduleAPI = usermodule.init({ client: client });
 	
 				moduleAPI.modName = (moduleAPI.modName || modulelist[i]);
@@ -184,7 +185,7 @@ client.messageCallback(function(message) {
 			{
 				client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
 				console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
-				console.log(e);
+				console.log(e.stack);
 			}
 		}
 	}

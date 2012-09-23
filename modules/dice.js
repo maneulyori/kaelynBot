@@ -7,16 +7,16 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleType: "command", moduleCommand: ["주사위"], callBack: messageHandler };
+	return { moduleType: "command", moduleCommand: ["주사위", "d20"], callBack: messageHandler };
 }
 
 function messageHandler(message)
 {
-	if(message.splitedMessage[0] == "주사위")
+	if(message.splitedMessage[0] == "주사위" || message.splitedMessage[0] == "d20")
 	{
-		var diceString = message.args[1].match(/([^\s]+) (.+)/);
+		var diceString = message.args[1].match(/([^\s]+)\ (.+)/);
 
-		client.privmsg (message.args[0], parser.parse(diceString));
+		client.privmsg (message.args[0], parser.parse(diceString[2]));
 	}
 }
 
