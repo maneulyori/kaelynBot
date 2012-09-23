@@ -90,11 +90,14 @@ client.messageCallback(function(message) {
 	processedMessage.isCommand = false;
 	processedMessage.splitedMessage = new Array();
 
-	if(((processedMessage.args[1] || '').startsWith(commandPrefix)) || (processedMessage.args[1] || '').startsWith('!'))
+	if(processedMessage.command == 'PRIVMSG')
 	{
-		processedMessage.isCommand = true;
-		processedMessage.args[1] = (message.args[1] || '').substring(commandPrefix.length, (message.args[1] || '').length);
-		processedMessage.splitedMessage = processedMessage.args[1].split(" ");
+		if(((processedMessage.args[1] || '').startsWith(commandPrefix)) || (processedMessage.args[1] || '').startsWith('!'))
+		{
+			processedMessage.isCommand = true;
+			processedMessage.args[1] = (message.args[1] || '').substring(commandPrefix.length, (message.args[1] || '').length);
+			processedMessage.splitedMessage = processedMessage.args[1].split(" ");
+		}
 	}
 
 	if(processedMessage.isCommand)
