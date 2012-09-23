@@ -30,7 +30,7 @@ function clone(obj) {
 
 //config area
 var modulepath = "./modules";
-var commandPrefix = "!";
+var commandPrefix = "#";
 
 //get list of files in module dir.
 var modulelist = fs.readdirSync(modulepath);
@@ -90,7 +90,7 @@ client.messageCallback(function(message) {
 	processedMessage.isCommand = false;
 	processedMessage.splitedMessage = new Array();
 
-	if((processedMessage.args[1] || '').startsWith(commandPrefix))
+	if(((processedMessage.args[1] || '').startsWith(commandPrefix)) || (processedMessage.args[1] || '').startsWith('!'))
 	{
 		processedMessage.isCommand = true;
 		processedMessage.args[1] = (message.args[1] || '').substring(commandPrefix.length, (message.args[1] || '').length);
@@ -127,7 +127,20 @@ client.messageCallback(function(message) {
 
 		if(processedMessage.splitedMessage[0] == "명령")
 		{
-			client.privmsg(message.args[0], "구현중");
+			var commandString = '명령: ';
+
+			for(i=0; i<modules.length; i++)
+			{
+				if(modules[i].moduleAPI.moduleType == "command")
+				{
+					for(j=0; j<modules[i].moduleAPI.moduleCommand.length; j++)
+					{
+						commandString += commandPrefix + modules[i].moduleAPI.moduleCommand[j] + ' ';
+					}
+				}
+			}
+			
+			client.privmsg(message.args[0], commandString);
 		}
 	}
 
