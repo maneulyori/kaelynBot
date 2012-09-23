@@ -14,6 +14,6 @@ function messageHandler(message)
 {
 	if(message.splitedMessage[0] == "exception")
 	{
-		throw message.splitedMessage[1];
+		throw new Error(message.splitedMessage[1]);
 	}
 }
