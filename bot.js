@@ -52,7 +52,7 @@ client.registeredCallback(function() {
 		//
 	}
 
-	//client.join("#이과무스메");
+	client.join("#이과무스메");
 	client.join("#uncyclopedia");
 	client.join("#");
 });

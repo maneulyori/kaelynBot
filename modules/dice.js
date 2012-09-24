@@ -16,7 +16,10 @@ function messageHandler(message)
 	{
 		var diceString = message.args[1].match(/([^\s]+)\ (.+)/);
 
-		client.privmsg (message.args[0], parser.parse(diceString[2]));
+		var dice = parser.parse(diceString[2]);
+
+		client.privmsg (message.args[0], "TOTAL: "+dice.total);
+		client.privmsg (message.args[0], "Rolls: "+dice.rolls);
 	}
 }
 
