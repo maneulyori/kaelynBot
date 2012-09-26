@@ -71,17 +71,30 @@ function modLoader()
 			try {
 				var usermodule = require(modulepath+"/"+modulelist[i]);
 
-				var moduleAPI = usermodule.init({ client: client });
+				var moduleAPI = usermodule.init({ client: client, moduleAPIRequest: moduleAPIRequest });
 	
 				moduleAPI.modName = (moduleAPI.modName || modulelist[i]);
 
-				modules.push({ moduleAPI: moduleAPI });
+				modules.push({ moduleAPI: moduleAPI, module: usermodule });
 			}
 			catch (err) {
 				console.log("module " + modulelist[i] + " failed to load");
 			}
 		}
 	}
+}
+
+function moduleAPIRequest(modName)
+{
+	for(i=0; i<modules.length; i++)
+	{
+		if(modules[i].moduleAPI.modName == modName)
+		{
+			return modules[i].module;
+		}
+	}
+
+	throw new Error ("Cannot find module " + modName);
 }
 
 client.messageCallback(function(message) {
