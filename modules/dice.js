@@ -2,12 +2,18 @@ var client;
 
 exports.init = init;
 exports.messageHandler = messageHandler;
+exports.diceRoller = diceRollerAPI;
 
 function init (initArg)
 {
 	client = initArg.client;
 
 	return { moduleType: "command", moduleCommand: ["주사위", "d20"], callBack: messageHandler };
+}
+
+function diceRollerAPI(args)
+{
+	return parser.parse(args[0]);
 }
 
 function messageHandler(message)

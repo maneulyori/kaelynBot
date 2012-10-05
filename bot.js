@@ -71,26 +71,50 @@ function modLoader()
 			try {
 				var usermodule = require(modulepath+"/"+modulelist[i]);
 
-				var moduleAPI = usermodule.init({ client: client, moduleAPIRequest: moduleAPIRequest });
+				var moduleAPI = usermodule.init({ client: client, moduleAPICall: moduleAPICall });
 	
 				moduleAPI.modName = (moduleAPI.modName || modulelist[i]);
 
 				modules.push({ moduleAPI: moduleAPI, module: usermodule });
 			}
-			catch (err) {
+			catch (e) {
 				console.log("module " + modulelist[i] + " failed to load");
+				console.log(e.stack);
 			}
 		}
 	}
 }
 
-function moduleAPIRequest(modName)
+function moduleAPICall(modName, functionName)
 {
+	var splitedCall = functionName.split('.');
+	var methode;
+/*
+	arguments = arguments.remove(0);
+	arguments = arguments.remove(0);
+*/
+	var args = clone(arguments);
+
+	for(i=2; i<arguments.length; i++)
+	{
+		args[i-2] = args[i];
+	}
+
+	delete args[args.length-1];
+	delete args[args.length-1];
+
 	for(i=0; i<modules.length; i++)
 	{
 		if(modules[i].moduleAPI.modName == modName)
 		{
-			return modules[i].module;
+			methode = modules[i].module;
+
+			for(j=0; j<splitedCall.length; j++)
+			{
+				methode = methode[splitedCall[j]];
+			}
+
+			return methode(args);
 		}
 	}
 
@@ -177,6 +201,7 @@ client.messageCallback(function(message) {
 		{
 			client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
 			console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
+			console.log(e.stack);
 		}
 	}
 	
