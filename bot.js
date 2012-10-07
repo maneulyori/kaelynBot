@@ -127,6 +127,7 @@ client.messageCallback(function(message) {
 	
 	processedMessage.isCommand = false;
 	processedMessage.splitedMessage = new Array();
+	processedMessage.channel = processedMessage.args[0];
 
 	if(processedMessage.command == 'PRIVMSG')
 	{
@@ -203,11 +204,8 @@ client.messageCallback(function(message) {
 			console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
 			console.log(e.stack);
 		}
-	}
-	
-	if(processedMessage.isCommand)
-	{		
-		for(i=0; i<modules.length; i++)
+		
+		if(processedMessage.isCommand)
 		{
 			try {
 				if(modules[i].moduleAPI.moduleType == "command")
@@ -227,7 +225,7 @@ client.messageCallback(function(message) {
 			}
 		}
 	}
-
+	
 	if(message.args[1] == "!TODO:")
 	{
 		client.privmsg(message.args[0], "TODO: Add channel blacklist");
