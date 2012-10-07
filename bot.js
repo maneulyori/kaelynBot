@@ -197,17 +197,9 @@ client.messageCallback(function(message) {
 						modules[i].moduleAPI.callBack(message);
 				}
 			}
-		}
-		catch (e)
-		{
-			client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
-			console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
-			console.log(e.stack);
-		}
-		
-		if(processedMessage.isCommand)
-		{
-			try {
+			
+			if(processedMessage.isCommand)
+			{
 				if(modules[i].moduleAPI.moduleType == "command")
 				{
 					for(j=0; j<modules[i].moduleAPI.moduleCommand.length; j++)
@@ -217,12 +209,12 @@ client.messageCallback(function(message) {
 					}
 				}
 			}
-			catch (e)
-			{
-				client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
-				console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
-				console.log(e.stack);
-			}
+		}
+		catch (e)
+		{
+			client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
+			console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
+			console.log(e.stack);
 		}
 	}
 	
