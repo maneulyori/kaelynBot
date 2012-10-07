@@ -8,7 +8,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleType: "command", moduleCommand: ["주사위", "d20"], callBack: messageHandler };
+	return { moduleCommand: {command: ["주사위", "d20"]}, callBack: messageHandler };
 }
 
 function diceRollerAPI(args)

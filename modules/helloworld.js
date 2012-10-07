@@ -7,7 +7,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleType: "command", moduleCommand: ["안녕", "hello", "moi", "aiya"], callBack: messageHandler };
+	return { moduleCommand: {command: ["안녕", "hello", "moi", "aiya"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)

@@ -11,7 +11,7 @@ function init (initArg)
 	client = initArg.client;
 	moduleAPICall = initArg.moduleAPICall;
 
-	return { moduleType: "command", moduleCommand: ["d20Intermodule"], callBack: messageHandler };
+	return { moduleCommand: {command: ["d20Intermodule"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)

@@ -7,7 +7,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleType: "command", moduleCommand: ["exception"], callBack: messageHandler };
+	return { moduleCommand: {command: ["exception"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)

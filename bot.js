@@ -30,7 +30,7 @@ function clone(obj) {
 
 //config area
 var modulepath = "./modules";
-var commandPrefix = "#";
+var commandPrefix = "$";
 
 //get list of files in module dir.
 var modulelist = fs.readdirSync(modulepath);
@@ -173,11 +173,11 @@ client.messageCallback(function(message) {
 
 			for(i=0; i<modules.length; i++)
 			{
-				if(modules[i].moduleAPI.moduleType == "command")
+				if(modules[i].moduleAPI.moduleCommand.command != undefined)
 				{
-					for(j=0; j<modules[i].moduleAPI.moduleCommand.length; j++)
+					for(j=0; j<modules[i].moduleAPI.moduleCommand.command.length; j++)
 					{
-						commandString += commandPrefix + modules[i].moduleAPI.moduleCommand[j] + ' ';
+						commandString += commandPrefix + modules[i].moduleAPI.moduleCommand.command[j] + ' ';
 					}
 				}
 			}
@@ -189,25 +189,30 @@ client.messageCallback(function(message) {
 	for(i=0; i<modules.length; i++)
 	{
 		try {
-			if(modules[i].moduleAPI.moduleType == "IRCcommand")
+			if(modules[i].moduleAPI.moduleCommand.IRCcommand != undefined)
 			{
-				for(j=0; j<modules[i].moduleAPI.moduleCommand.length; j++)
+				for(j=0; j<modules[i].moduleAPI.moduleCommand.IRCcommand.length; j++)
 				{
-					if(modules[i].moduleAPI.moduleCommand[j] == message.command)
+					if(modules[i].moduleAPI.moduleCommand.IRCcommand[j] == message.command)
 						modules[i].moduleAPI.callBack(message);
 				}
 			}
 			
 			if(processedMessage.isCommand)
 			{
-				if(modules[i].moduleAPI.moduleType == "command")
+				if(modules[i].moduleAPI.moduleCommand.command != undefined)
 				{
-					for(j=0; j<modules[i].moduleAPI.moduleCommand.length; j++)
+					for(j=0; j<modules[i].moduleAPI.moduleCommand.command.length; j++)
 					{
-						if(modules[i].moduleAPI.moduleCommand[j] == processedMessage.splitedMessage[0])
+						if(modules[i].moduleAPI.moduleCommand.command[j] == processedMessage.splitedMessage[0])
 							modules[i].moduleAPI.callBack(processedMessage);
 					}
 				}
+			}
+			
+			if(modules[i].moduleAPI.isPromisc && message.command == "PRIVMSG")
+			{
+				modules[i].moduleAPI.promiscCallBack(message);
 			}
 		}
 		catch (e)

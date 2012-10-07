@@ -8,7 +8,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleType: "command", moduleCommand: ["업타임", "쿨링팬", "온도"], callBack: messageHandler };
+	return { moduleCommand: {command: ["업타임", "쿨링팬", "온도"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)

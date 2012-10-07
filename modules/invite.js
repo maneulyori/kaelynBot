@@ -7,7 +7,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleType: "IRCcommand", moduleCommand: ["INVITE"], callBack: messageHandler };
+	return { moduleCommand: {IRCcommand: ["INVITE"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)
