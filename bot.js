@@ -212,7 +212,9 @@ client.messageCallback(function(message) {
 		}
 		catch (e)
 		{
-			client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
+			if(processedMessage.isCommand)
+				client.privmsg(processedMessage.args[0], "Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
+	
 			console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
 			console.log(e.stack);
 		}
