@@ -57,6 +57,14 @@ client.registeredCallback(function() {
 	client.join("#");
 });
 
+process.on('SIGINT', function () {
+	console.log("Ctrl-C received! Terminating...");
+
+	client.quit("Ctrl-C receieved! Terminating...");
+
+	process.exit(0);
+});
+
 modLoader();
 
 function modLoader()
@@ -93,7 +101,7 @@ function moduleAPICall(modName, functionName)
 	arguments = arguments.remove(0);
 	arguments = arguments.remove(0);
 */
-	var args = clone(arguments);
+	var args = new Array;
 
 	for(i=2; i<arguments.length; i++)
 	{
@@ -128,6 +136,7 @@ client.messageCallback(function(message) {
 	processedMessage.isCommand = false;
 	processedMessage.splitedMessage = new Array();
 	processedMessage.channel = processedMessage.args[0];
+	processedMessage.content = processedMessage.args[1];
 
 	if(processedMessage.command == 'PRIVMSG')
 	{
@@ -212,7 +221,7 @@ client.messageCallback(function(message) {
 			
 			if(modules[i].moduleAPI.isPromisc && message.command == "PRIVMSG")
 			{
-				modules[i].moduleAPI.promiscCallBack(message);
+				modules[i].moduleAPI.promiscCallBack(processedMessage);
 			}
 		}
 		catch (e)
@@ -223,10 +232,5 @@ client.messageCallback(function(message) {
 			console.log("Exception " + e + " detected in module " + modules[i].moduleAPI.modName);
 			console.log(e.stack);
 		}
-	}
-	
-	if(message.args[1] == "!TODO:")
-	{
-		client.privmsg(message.args[0], "TODO: Add channel blacklist");
 	}
 });

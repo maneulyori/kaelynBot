@@ -64,6 +64,11 @@ function client(server, port, encoding)
 	{
 		self.raw("PART "+target+" "+msg);
 	}
+
+	self.quit = function(msg)
+	{
+		self.raw("QUIT " + msg);
+	}
 }
 
 function getMessage(data, encoding, client)

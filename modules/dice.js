@@ -20,12 +20,12 @@ function messageHandler(message)
 {
 	if(message.splitedMessage[0] == "주사위" || message.splitedMessage[0] == "d20")
 	{
-		var diceString = message.args[1].match(/([^\s]+)\ (.+)/);
+		var diceString = message.content.match(/([^\s]+)\ (.+)/);
 
 		var dice = parser.parse(diceString[2]);
 
-		client.privmsg (message.args[0], "TOTAL: "+dice.total);
-		client.privmsg (message.args[0], "Rolls: "+dice.rolls);
+		client.privmsg (message.channel, "TOTAL: "+dice.total);
+		client.privmsg (message.channel, "Rolls: "+dice.rolls);
 	}
 }
 

@@ -14,18 +14,18 @@ function messageHandler(message)
 {
 	if(message.splitedMessage[0] == "안녕")
 	{
-		client.privmsg (message.args[0], "세상아!");
+		client.privmsg (message.channel, "세상아!");
 	}
 	else if(message.splitedMessage[0] == "hello")
 	{
-		client.privmsg(message.args[0], "world!");
+		client.privmsg(message.channel, "world!");
 	}
 	else if(message.splitedMessage[0] == "moi")
 	{
-		client.privmsg(message.args[0], "maailma!");
+		client.privmsg(message.channel, "maailma!");
 	}
 	else if(message.splitedMessage[0] == "aiya")
 	{
-		client.privmsg(message.args[0], "ambar!");
+		client.privmsg(message.channel, "ambar!");
 	}
 }
