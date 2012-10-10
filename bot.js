@@ -62,6 +62,18 @@ process.on('SIGINT', function () {
 
 	client.quit("Ctrl-C receieved! Terminating...");
 
+	console.log("Unloading modules...");
+
+	while(modules.length > 0)
+	{
+		if(typeof(modules[0].unloadCallback) == 'Function')
+		{
+			modules[0].unloadCallback();
+		}
+
+		modules.remove(0);
+	}
+
 	process.exit(0);
 });
 
@@ -73,7 +85,7 @@ function modLoader()
 	for(i=0; i<modulelist.length; i++)
 	{
 		if(modulelist[i].endsWith(".js"))
-		{
+		{	
 			delete require.cache[require.resolve(modulepath+"/"+modulelist[i])];
 
 			try {
