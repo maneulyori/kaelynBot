@@ -30,31 +30,30 @@ function clone(obj) {
 
 //config area
 var modulepath = "./modules";
-var commandPrefix = "$";
 
 //get list of files in module dir.
 var modulelist = fs.readdirSync(modulepath);
 
 console.log(modulelist.length + " modules detected in "+modulepath+". Avaliable modules are: " + modulelist);
 
-var client = new irc.client('kanade.irc.ozinger.org', '6667', "UTF-8");
+console.log("Reading config.json...");
 
-client.register("kaelyn_dove", "kaelyn_dove", "0", "kaelyn_dove", "kaelyn_dove");
+var config = require('./config.json');
+
+var client = new irc.client(config.ircserver, config.ircport, config.ircencoding);
+
+client.register(config.user, config.usermode, config.realname, config.nick);
 
 client.registeredCallback(function() {
 
-	try {
-		var config = require('./config.json');
-		client.raw("/nickserv identify " + config.nickserv);
-	}
-	catch (e)
+	if(config.nickserv != undefined)
 	{
-		//
+		client.raw("nickserv identify " + config.nickserv);
 	}
 
-	client.join("#이과무스메");
-	client.join("#uncyclopedia");
-	client.join("#");
+	config.channels.forEach( function (channel) {
+		client.join(channel);
+	});
 });
 
 process.on('SIGINT', function () {
@@ -152,10 +151,10 @@ client.messageCallback(function(message) {
 
 	if(processedMessage.command == 'PRIVMSG')
 	{
-		if(((processedMessage.args[1] || '').startsWith(commandPrefix)) || (processedMessage.args[1] || '').startsWith('!'))
+		if(((processedMessage.args[1] || '').startsWith(config.commandPrefix)) || (processedMessage.args[1] || '').startsWith('!'))
 		{
 			processedMessage.isCommand = true;
-			processedMessage.args[1] = (message.args[1] || '').substring(commandPrefix.length, (message.args[1] || '').length);
+			processedMessage.args[1] = (message.args[1] || '').substring(config.commandPrefix.length, (message.args[1] || '').length);
 			processedMessage.splitedMessage = processedMessage.args[1].split(" ");
 		}
 	}
@@ -198,7 +197,7 @@ client.messageCallback(function(message) {
 				{
 					for(j=0; j<modules[i].moduleAPI.moduleCommand.command.length; j++)
 					{
-						commandString += commandPrefix + modules[i].moduleAPI.moduleCommand.command[j] + ' ';
+						commandString += config.commandPrefix + modules[i].moduleAPI.moduleCommand.command[j] + ' ';
 					}
 				}
 			}
