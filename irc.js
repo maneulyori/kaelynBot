@@ -30,9 +30,9 @@ function client(server, port, encoding)
 		this.client.write(rawmsg + "\r\n");
 	}
 
-	self.register = function (username, hostname, servername, realname, nick)
+	self.register = function (username, usermode, realname, nick)
 	{
-		self.raw("USER " + username + " " + hostname + " " + servername + " " + realname);
+		self.raw("USER " + username + " " + usermode + " " + "0" + " " + realname);
 		self.raw("NICK " + nick);
 
 		self.nick = nick;
@@ -53,6 +53,11 @@ function client(server, port, encoding)
 	self.notice = function(target, message)
 	{
 		self.raw("NOTICE " + target + " " + message);
+	}
+
+	self.kick = function(channel, target, message)
+	{
+		self.raw("KICK " + channel + " " + target + " " + message);
 	}
 
 	self.join = function(target)
@@ -151,5 +156,7 @@ function parseMessage(line, stripColors) {
         message.args = middle.split(/ +/);
     if ( typeof(trailing) != 'undefined' && trailing.length )
         message.args.push(trailing);
+
+	message.channel = message.args[0];
     return message;
 }	
