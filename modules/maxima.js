@@ -1,4 +1,5 @@
 var spawn = require('child_process').spawn;
+var maximaProcessHT = new Object();
 
 var client;
 
