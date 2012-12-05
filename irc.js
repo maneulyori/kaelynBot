@@ -159,4 +159,4 @@ function parseMessage(line, stripColors) {
 
 	message.channel = message.args[0];
     return message;
-}	
+}
