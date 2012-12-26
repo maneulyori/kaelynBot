@@ -23,6 +23,8 @@ function client(server, port, encoding, useSSL)
 	self.nick = '';
 
 	self.client.on('data', function(data) { getMessage(data, self.encoding, self)});
+	self.client.on('error', function(error) { console.log("error detected!") });
+	self.client.on('timeout', function() { console.log("timeout detected!") });
 	console.log("connection succeed to " + server + ":" + port);
 
 	self.registeredCallback = function(callback)
