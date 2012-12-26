@@ -1,6 +1,7 @@
 var irc = require('./irc.js');
 var fs = require('fs');
 var sqlite = require('sqlite3');
+var tls = require('tls');
 
 var modules = new Array();
 
@@ -29,7 +30,6 @@ function clone(obj) {
 	return copy;
 }
 
-//config area
 var modulepath = "./modules";
 
 //get list of files in module dir.
@@ -39,9 +39,10 @@ console.log(modulelist.length + " modules detected in "+modulepath+". Avaliable 
 
 console.log("Reading config.json...");
 
+//load configuration from file
 var config = require('./config.json');
 
-var client = new irc.client(config.ircserver, config.ircport, config.ircencoding);
+var client = new irc.client(config.ircserver, config.ircport, config.ircencoding, config.useSSL);
 
 client.register(config.user, config.usermode, config.realname, config.nick);
 

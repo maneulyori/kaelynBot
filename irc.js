@@ -1,13 +1,24 @@
 var util = require('util');
 var net = require('net');
+var tls = require('tls');
 var replyFor = require('./codes.js');
 
 exports.client = client;
 
-function client(server, port, encoding)
+function client(server, port, encoding, useSSL)
 {
 	var self = this;
-	self.client = net.connect(port, server);
+	if(useSSL == false)
+	{
+		console.log("Connecting to server...");
+		self.client = net.connect(port, server);
+	}
+	else
+	{
+		console.log("connecting to server using TLS...");
+		self.client = tls.connect(port, server, function() {});
+	}
+
 	self.buffer = '';
 	self.nick = '';
 

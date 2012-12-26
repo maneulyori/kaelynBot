@@ -1,12 +1,13 @@
 {
 	"ircserver": "kanade.irc.ozinger.org",
-	"ircport": 6667,
+	"ircport": 6666,
 	"ircencoding": "UTF-8",
-	"nick": "kaelyn_dove",
+	"useSSL": false,
+	"nick": "kaelyn_dove^xps",
 	"user": "kaelyn_dove",
 	"usermode": "0",
 	"realname": "kaelyn_dove",
-	"nickserv": "examplepass",
+	"nickserv": "nickservPass",
 	"channels": ["#kaelynBot"],
 	"commandPrefix": "$"
 }
