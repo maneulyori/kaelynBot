@@ -67,9 +67,9 @@ process.on('SIGINT', function () {
 
 	while(modules.length > 0)
 	{
-		if(typeof(modules[0].unloadCallback) == 'Function')
+		if(typeof(modules[0].moduleAPI.unloadCallback) == 'function')
 		{
-			modules[0].unloadCallback();
+			modules[0].moduleAPI.unloadCallback();
 		}
 
 		modules.remove(0);
@@ -171,9 +171,9 @@ client.messageCallback(function(message) {
 
 				while(modules.length > 0)
 				{
-					if(typeof(modules[0].unloadCallback) == 'Function')
+					if(typeof(modules[0].moduleAPI.unloadCallback) == 'function')
 					{
-						modules[0].unloadCallback();
+						modules[0].moduleAPI.unloadCallback();
 					}
 					modules.remove(0);
 				}
