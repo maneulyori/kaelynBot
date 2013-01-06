@@ -17,7 +17,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
+	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART", "QUIT"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
 }
 
 function getTimestamp(date)
@@ -71,6 +71,13 @@ function messageHandler(message)
 	else if(message.command == "PART")
 	{
 		writeLog(message.channel, timestamp + " " + message.nick + " Parts. (" + message.args[1] + ")");
+	}
+	else if(message.command == "QUIT")
+	{
+		for(var channel in channelLogStream)
+		{
+			writeLog(channel, timestamp + " " + message.nick + " Quits. (" + message.channel + ")");
+		}
 	}
 }
 
