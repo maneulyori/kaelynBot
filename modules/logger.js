@@ -36,7 +36,7 @@ function writeLog(channel, message)
 		channelLogStream[channel] = fs.createWriteStream("logs/" + channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
 		channelLogStream[channel].write("Start logging at " + date  + "\n");
 	}
-	channelLogStream[channel].write(message, "UTF-8");
+	channelLogStream[channel].write(message + "\r\n", "UTF-8");
 }
 
 function messageHandler(message)
@@ -62,15 +62,15 @@ function messageHandler(message)
 	}
 	else if(message.command == "KICK")
 	{
-		writeLog(message.channel, timestamp + " " + message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")\n")
+		writeLog(message.channel, timestamp + " " + message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")")
 	}
 	else if(message.command == "JOIN")
 	{
-		writeLog(message.channel, timestamp + " " + message.nick + " Joins.\n");
+		writeLog(message.channel, timestamp + " " + message.nick + " Joins.");
 	}
 	else if(message.command == "PART")
 	{
-		writeLog(message.channel, timestamp + " " + message.nick + " Parts. (" + message.args[1] + ")\n");
+		writeLog(message.channel, timestamp + " " + message.nick + " Parts. (" + message.args[1] + ")");
 	}
 }
 
@@ -78,12 +78,8 @@ function promiscMessageHandler(message)
 {
 	var date = new Date();
 	var timestamp = date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10) + ' ' + date.getHours().zeroPad(10) + ':' + date.getMinutes().zeroPad(10) + ':' + date.getSeconds().zeroPad(10);
-	if(channelLogStream[message.channel] == undefined)
-	{
-		channelLogStream[message.channel] = fs.createWriteStream("logs/" + message.channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
-		channelLogStream[message.channel].write("Start logging at " + date + "\n");
-	}
-	channelLogStream[message.channel].write(timestamp + " " + '<' + message.nick + '> ' + message.content + '\n', "UTF-8");
+
+	writeLog(message.channel, timestamp + " " + '<' + message.nick + '> ' + message.content);
 }
 
 function unload()
