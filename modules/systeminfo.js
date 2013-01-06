@@ -8,7 +8,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: {command: ["업타임", "쿨링팬", "온도"]}, callBack: messageHandler };
+	return { moduleCommand: {command: ["업타임", "쿨링팬", "온도", "uname"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)
@@ -29,6 +29,12 @@ function messageHandler(message)
 	{
 		var gputemp = exec('nvidia-smi -q -d TEMPERATURE | grep Gpu', function(error, stdout, stderr) {
 			client.privmsg (message.args[0], stdout);
+		});
+	}
+	else if(message.splitedMessage[0] == "uname")
+	{
+		var uname = exec('uname -a', function(error, stdout, stderr) {
+			client.privmsg(message.channel, stdout);
 		});
 	}
 }
