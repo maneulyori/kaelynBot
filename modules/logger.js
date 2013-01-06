@@ -17,11 +17,33 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
+	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
+}
+
+function getTimestamp(date)
+{
+	var timestamp = date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10) + ' ' + date.getHours().zeroPad(10) + ':' + date.getMinutes().zeroPad(10) + ':' + date.getSeconds().zeroPad(10);
+
+	return timestamp;
+}
+
+function writeLog(channel, message)
+{
+	var date = new Date();
+	var timestamp = getTimestamp(date);
+	if(channelLogStream[channel] == undefined)
+	{
+		channelLogStream[channel] = fs.createWriteStream("logs/" + channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
+		channelLogStream[channel].write("Start logging at " + date  + "\n");
+	}
+	channelLogStream[channel].write(message, "UTF-8");
 }
 
 function messageHandler(message)
 {
+	var date = new Date();
+	var timestamp = getTimestamp(date);
+
 	if(message.command == "PRIVMSG")
 	{
 		if(message.splitedMessage[0] == "로깅")
@@ -40,14 +62,15 @@ function messageHandler(message)
 	}
 	else if(message.command == "KICK")
 	{
-		var date = new Date();
-		var timestamp = date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10) + ' ' + date.getHours().zeroPad(10) + ':' + date.getMinutes().zeroPad(10) + ':' + date.getSeconds().zeroPad(10);
-		if(channelLogStream[message.channel] == undefined)
-		{
-			channelLogStream[message.channel] = fs.createWriteStream("logs/" + message.channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
-			channelLogStream[message.channel].write("Start logging at " + date	+ "\n");
-		}
-		channelLogStream[message.channel].write(timestamp + " " + message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")\n", "UTF-8");
+		writeLog(message.channel, timestamp + " " + message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")\n")
+	}
+	else if(message.command == "JOIN")
+	{
+		writeLog(message.channel, timestamp + " " + message.nick + " Joins.\n");
+	}
+	else if(message.command == "PART")
+	{
+		writeLog(message.channel, timestamp + " " + message.nick + " Parts. (" + message.args[1] + ")\n");
 	}
 }
 
