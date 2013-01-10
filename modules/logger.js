@@ -71,7 +71,7 @@ function messageHandler(message)
 	}
 	else if(message.command == 'MODS')
 	{
-		writeLog(message.channel, message.completeNick + " Set mode " message.content);
+		writeLog(message.channel, message.completeNick + " Set mode " + message.content);
 	}
 	else if(message.command == "QUIT")
 	{
