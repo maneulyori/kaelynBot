@@ -139,6 +139,7 @@ function parseMessage(line, stripColors) {
 			message.nick = match[1];
             message.user = match[2];
             message.host = match[3];
+			message.completeNick = match[1] + '!' + match[2] + '@' + match[3];
         }
         else {
             message.server = message.prefix;
