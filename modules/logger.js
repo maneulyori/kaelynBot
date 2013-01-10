@@ -59,32 +59,39 @@ function messageHandler(message)
 	}
 	else if(message.command == "KICK")
 	{
-		writeLog(message.channel, message.completeNick + " kicks " + message.args[1] + " (" + message.args[2] + ")")
+		writeLog(message.channel, message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")")
 	}
 	else if(message.command == "JOIN")
 	{
-		writeLog(message.channel, message.completeNick + " Joins.");
+		writeLog(message.channel, message.prefix + " Joins.");
 	}
 	else if(message.command == "PART")
 	{
-		writeLog(message.channel, message.completeNick + " Parts. (" + message.args[1] + ")");
+		writeLog(message.channel, message.prefix + " Parts. (" + message.args[1] + ")");
 	}
-	else if(message.command == 'MODS')
+	else if(message.command == 'MODE')
 	{
-		writeLog(message.channel, message.completeNick + " Set mode " + message.content);
+		modeStr = '';
+
+		for(var args in message.args)
+		{
+			modeStr += args;
+		}
+
+		writeLog(message.channel, message.prefix + " Set mode " + args);
 	}
 	else if(message.command == "QUIT")
 	{
 		for(var channel in channelLogStream)
 		{
-			writeLog(channel, message.completeNick + " Quits. (" + message.channel + ")");
+			writeLog(channel, message.prefix + " Quits. (" + message.channel + ")");
 		}
 	}
 }
 
 function promiscMessageHandler(message)
 {
-	writeLog(message.channel, '<' + message.completeNick + '> ' + message.content);
+	writeLog(message.channel, '<' + message.nick + '> ' + message.content);
 }
 
 function unload()
