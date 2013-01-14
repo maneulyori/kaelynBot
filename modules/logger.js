@@ -73,12 +73,12 @@ function messageHandler(message)
 	{
 		modeStr = '';
 
-		for(var args in message.args)
+		for(this.i = 1; this.i <message.args.length; this.i++)
 		{
-			modeStr += args;
+			modeStr += message.args[this.i] + ' ';
 		}
 
-		writeLog(message.channel, message.prefix + " Set mode " + args);
+		writeLog(message.channel, message.prefix + " Set mode " + modeStr);
 	}
 	else if(message.command == "QUIT")
 	{
