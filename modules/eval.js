@@ -16,7 +16,7 @@ function init (initArg)
 
 function messageHandler(message)
 {
-	if(message.command == "eval")
+	if(message.moduleCommand == "eval")
 	{
 		for (var nick in whitelist)
 		{
