@@ -49,12 +49,18 @@ function messageHandler(message)
 {
 	if(message.moduleCommand == "eval")
 	{
-		var source = message.content.match(/([^\s]+)\ (.+)/)[2];
-
-		var worker = cluster.fork();
-
-		workerTable[worker] = message.channel;
+		try {
+			var source = message.content.match(/([^\s]+)\ (.+)/)[2];
 		
-		worker.send(source); //Send the code to run for the worker
+			var worker = cluster.fork();
+			workerTable[worker] = message.channel;
+		
+			worker.send(source); //Send the code to run for the worker
+		}
+		catch (e)
+		{
+			client.privmsg(message.channel, "eval: 자바스크립트 소스를 실행합니다.");
+			client.privmsg(message.channel, "사용할 수 있는 모듈에는 dns, url, jsdom이 있습니다.");
+		}
 	}
 }
