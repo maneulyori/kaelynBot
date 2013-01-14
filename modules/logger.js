@@ -19,7 +19,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART", "QUIT"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
+	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART", "QUIT", "MODE"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
 }
 
 function getTimestamp(date)
@@ -38,7 +38,7 @@ function writeLog(channel, message)
 		channelLogStream[channel] = fs.createWriteStream("logs/" + channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
 		channelLogStream[channel].write("Start logging at " + date  + "\n");
 	}
-	channelLogStream[channel].write(message + "\r\n", "UTF-8");
+	channelLogStream[channel].write(timestamp + " " + message + "\r\n", "UTF-8");
 }
 
 function messageHandler(message)
@@ -70,31 +70,39 @@ function messageHandler(message)
 	}
 	else if(message.command == "KICK")
 	{
-		writeLog(message.channel, timestamp + " " + message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")")
+		writeLog(message.channel, message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")")
 	}
 	else if(message.command == "JOIN")
 	{
-		writeLog(message.channel, timestamp + " " + message.nick + " Joins.");
+		writeLog(message.channel, message.prefix + " Joins.");
 	}
 	else if(message.command == "PART")
 	{
-		writeLog(message.channel, timestamp + " " + message.nick + " Parts. (" + message.args[1] + ")");
+		writeLog(message.channel, message.prefix + " Parts. (" + message.args[1] + ")");
+	}
+	else if(message.command == 'MODE')
+	{
+		modeStr = '';
+
+		for(var args in message.args)
+		{
+			modeStr += args;
+		}
+
+		writeLog(message.channel, message.prefix + " Set mode " + args);
 	}
 	else if(message.command == "QUIT")
 	{
 		for(var channel in channelLogStream)
 		{
-			writeLog(channel, timestamp + " " + message.nick + " Quits. (" + message.channel + ")");
+			writeLog(channel, message.prefix + " Quits. (" + message.channel + ")");
 		}
 	}
 }
 
 function promiscMessageHandler(message)
 {
-	var date = new Date();
-	var timestamp = date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10) + ' ' + date.getHours().zeroPad(10) + ':' + date.getMinutes().zeroPad(10) + ':' + date.getSeconds().zeroPad(10);
-
-	writeLog(message.channel, timestamp + " " + '<' + message.nick + '> ' + message.content);
+	writeLog(message.channel, '<' + message.nick + '> ' + message.content);
 }
 
 function unload()

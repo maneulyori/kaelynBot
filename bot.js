@@ -208,33 +208,33 @@ client.messageCallback(function(message) {
 		}
 	}
 
-	for(i=0; i<modules.length; i++)
+	for(this.i=0; this.i<modules.length; this.i++)
 	{
 		try {
-			if(modules[i].moduleAPI.moduleCommand.IRCcommand != undefined)
+			if(modules[this.i].moduleAPI.moduleCommand.IRCcommand != undefined)
 			{
-				for(j=0; j<modules[i].moduleAPI.moduleCommand.IRCcommand.length; j++)
+				for(this.j=0; this.j<modules[this.i].moduleAPI.moduleCommand.IRCcommand.length; this.j++)
 				{
-					if(modules[i].moduleAPI.moduleCommand.IRCcommand[j] == message.command)
-						modules[i].moduleAPI.callBack(message);
+					if(modules[this.i].moduleAPI.moduleCommand.IRCcommand[this.j] == message.command)
+						modules[this.i].moduleAPI.callBack(message);
 				}
 			}
 			
 			if(processedMessage.isCommand)
 			{
-				if(modules[i].moduleAPI.moduleCommand.command != undefined)
+				if(modules[this.i].moduleAPI.moduleCommand.command != undefined)
 				{
-					for(j=0; j<modules[i].moduleAPI.moduleCommand.command.length; j++)
+					for(this.j=0; this.j<modules[this.i].moduleAPI.moduleCommand.command.length; this.j++)
 					{
-						if(modules[i].moduleAPI.moduleCommand.command[j] == processedMessage.splitedMessage[0])
-							modules[i].moduleAPI.callBack(processedMessage);
+						if(modules[this.i].moduleAPI.moduleCommand.command[this.j] == processedMessage.splitedMessage[0])
+							modules[this.i].moduleAPI.callBack(processedMessage);
 					}
 				}
 			}
 			
-			if(modules[i].moduleAPI.isPromisc && message.command == "PRIVMSG")
+			if(modules[this.i].moduleAPI.isPromisc && message.command == "PRIVMSG")
 			{
-				modules[i].moduleAPI.promiscCallBack(processedMessage);
+				modules[this.i].moduleAPI.promiscCallBack(processedMessage);
 			}
 		}
 		catch (e)
