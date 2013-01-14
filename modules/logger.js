@@ -13,6 +13,8 @@ var channelLogStream = new Object();
 exports.init = init;
 exports.messageHandler = messageHandler;
 
+var channelBlacklist = ["#!/bin/bash"];
+
 function init (initArg)
 {
 	client = initArg.client;
@@ -43,6 +45,12 @@ function messageHandler(message)
 {
 	var date = new Date();
 	var timestamp = getTimestamp(date);
+
+	for (var black in channelBlacklist)
+	{
+		if(message.channel == black)
+			return ;
+	}
 
 	if(message.command == "PRIVMSG")
 	{
