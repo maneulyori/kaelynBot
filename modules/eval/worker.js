@@ -3,6 +3,9 @@ process.on('message', function(msg) {
     var vm = require("vm");
 
     var sandbox = {
+		dns: require("dns"),
+		url: require("url"),
+		jsdom: require("jsdom"),
 		out: ""
 	};
 
