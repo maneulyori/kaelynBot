@@ -8,14 +8,21 @@ process.on('message', function(msg) {
 
 	var prefix = "function print(str) { out += str; }";
 
-    var script = vm.createScript(prefix + ";" + msg);
-
-	try {
+	try{
+    	var script = vm.createScript(prefix + ";" + msg);
     	script.runInNewContext(sandbox);
 	}
 	catch (e)
 	{
-		sandbox.out = e.message;
+		if(typeof(e) != 'undefined')
+		{
+			if(typeof(e.name) != 'undefined' && typeof(e.message) != 'undefined')
+				sandbox.out = e.name + ": " + e.message;
+			else
+				sandbox.out = "에러 던질거면 제대로 던져 ㅗ"
+		}
+		else
+			sandbox.out = "에러 던질거면 제대로 던져 ㅗ undefined 던져서 뭐 하겠다고?";
 	}
 
 	var outArr = sandbox.out.split("\n");
