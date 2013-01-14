@@ -18,7 +18,7 @@ process.on('message', function(msg) {
 		{
 			sandbox.out = "throw null 해서 뭐 하겠다고?";
 		}
-		else if(typeof(e) == 'undefined')
+		else if(typeof(e) != 'undefined')
 		{
 			if(typeof(e.name) != 'undefined' && typeof(e.message) != 'undefined')
 				sandbox.out = e.name + ": " + e.message;
