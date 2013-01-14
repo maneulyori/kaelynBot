@@ -158,6 +158,7 @@ client.messageCallback(function(message) {
 			processedMessage.isCommand = true;
 			processedMessage.args[1] = (message.args[1] || '').substring(config.commandPrefix.length, (message.args[1] || '').length);
 			processedMessage.splitedMessage = processedMessage.args[1].split(" ");
+			processedMessage.moduleCommand = processedMessage.splitedMessage[0];
 		}
 	}
 
