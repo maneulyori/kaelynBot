@@ -20,7 +20,7 @@ function messageHandler(message)
 	{
 		for (var nick in whitelist)
 		{
-			if(message.prefix == nick)
+			if(message.prefix == whitelist[nick])
 			{
 				var sandbox = {
 					out : "",
