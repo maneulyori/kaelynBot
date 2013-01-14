@@ -1,17 +1,24 @@
-process.on('message', function(source) {
+process.on('message', function(msg) {
 
     var vm = require("vm");
 
     var sandbox = {
-		out: "",
-		print: function(str) { out += str }
+		out: ""
 	};
 
-    var script = vm.createScript(source);
+	var prefix = "function print(str) { out += str; }";
 
-    script.runInNewContext(sandbox);
+    var script = vm.createScript(prefix + ";" + msg);
 
-    process.send(sandbox.out); //Send the finished message to the parent process
+	try {
+    	script.runInNewContext(sandbox);
+	}
+	catch (e)
+	{
+		sandbox.out = e.message;
+	}
 
-	process.exit();
+	var outArr = sandbox.out.split("\n");
+
+    process.send(outArr); //Send the finished message to the parent process
 });
