@@ -7,7 +7,7 @@ exports.init = init;
 exports.messageHandler = messageHandler;
 
 cluster.setupMaster({
-	exec : "eval/worker.js",
+	exec : "modules/eval/worker.js",
 	args : process.argv.slice(2),
 	silent : false
 });
@@ -25,14 +25,16 @@ function messageHandler(message)
 	{
 		var source = message.content.match(/([^\s]+)\ (.+)/)[2];
 
+		console.log("executing " + source);
+
 		//This will be fired when the forked process becomes online
 		cluster.on( "online", function(worker) {
 			var timer = 0;
 
 			worker.on( "message", function(msg) {
 				clearTimeout(timer); //The worker responded in under 1 seconds, clear the timeout
-				console.log(msg);
-			worker.destroy(); //Don't leave him hanging 
+				client.privmsg(message.channel, msg);
+				worker.destroy(); //Don't leave him hanging 
 			});
 
 			timer = setTimeout( function() {
@@ -41,8 +43,8 @@ function messageHandler(message)
 			}, 1000);
 
 			worker.send(source); //Send the code to run for the worker
-
-			cluster.fork();
 		});
+
+		cluster.fork();
 	}
 }
