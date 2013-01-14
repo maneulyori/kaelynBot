@@ -16,18 +16,18 @@ process.on('message', function(msg) {
 	{
 		if(e == null)
 		{
-			sandbox.out = "에러 던질거면 제대로 던져 ㅗ null 던져서 뭐 하겠다고?";
+			sandbox.out = "throw null 해서 뭐 하겠다고?";
 		}
 		else if(typeof(e) == 'undefined')
 		{
 			if(typeof(e.name) != 'undefined' && typeof(e.message) != 'undefined')
 				sandbox.out = e.name + ": " + e.message;
 			else
-				sandbox.out = "에러 던질거면 제대로 던져 ㅗ"
+				sandbox.out = "이상한 거 throw 하지 마!"
 		}
 		else
 		{
-			sandbox.out = "에러 던질거면 제대로 던져 ㅗ undefined 던져서 뭐 하겠다고?";
+			sandbox.out = "throw undefined 해서 뭐 하겠다고?";
 		}
 	}
 
