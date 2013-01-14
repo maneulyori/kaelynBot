@@ -33,6 +33,8 @@ function writeLog(channel, message)
 {
 	var date = new Date();
 	var timestamp = getTimestamp(date);
+
+	channel = channel.replace(/\//g, "_");
 	if(channelLogStream[channel] == undefined)
 	{
 		channelLogStream[channel] = fs.createWriteStream("logs/" + channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
@@ -45,8 +47,6 @@ function messageHandler(message)
 {
 	var date = new Date();
 	var timestamp = getTimestamp(date);
-
-	message.channel.replace("/", "_");
 
 	for (var black in channelBlacklist)
 	{
