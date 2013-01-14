@@ -13,7 +13,7 @@ var channelLogStream = new Object();
 exports.init = init;
 exports.messageHandler = messageHandler;
 
-var channelBlacklist = ["#!/bin/bash"];
+var channelBlacklist = ["#!_bin_bash"];
 
 function init (initArg)
 {
@@ -45,6 +45,8 @@ function messageHandler(message)
 {
 	var date = new Date();
 	var timestamp = getTimestamp(date);
+
+	message.channel.replace("/", "_");
 
 	for (var black in channelBlacklist)
 	{
