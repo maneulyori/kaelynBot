@@ -13,6 +13,8 @@ var channelLogStream = new Object();
 exports.init = init;
 exports.messageHandler = messageHandler;
 
+var channelBlacklist = ["#!_bin_bash"];
+
 function init (initArg)
 {
 	client = initArg.client;
@@ -31,6 +33,8 @@ function writeLog(channel, message)
 {
 	var date = new Date();
 	var timestamp = getTimestamp(date);
+
+	channel = channel.replace(/\//g, "_");
 	if(channelLogStream[channel] == undefined)
 	{
 		channelLogStream[channel] = fs.createWriteStream("logs/" + channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
@@ -41,6 +45,15 @@ function writeLog(channel, message)
 
 function messageHandler(message)
 {
+	var date = new Date();
+	var timestamp = getTimestamp(date);
+
+	for (var black in channelBlacklist)
+	{
+		if(message.channel == black)
+			return ;
+	}
+
 	if(message.command == "PRIVMSG")
 	{
 		if(message.splitedMessage[0] == "로깅")
