@@ -34,6 +34,11 @@ process.on('message', function(msg) {
 		}
 	}
 
+	if(sandbox.out.length == 0)
+	{
+		sandbox.out = "출력 없음.";
+	}
+
 	var outArr = sandbox.out.split("\n");
 
     process.send(outArr); //Send the finished message to the parent process
