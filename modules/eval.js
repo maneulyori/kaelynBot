@@ -39,7 +39,7 @@ function init (initArg)
 			worker.destroy(); //Give it 5 seconds to run, then abort it
 			client.privmsg(workerTable[worker], "worker timed out");
 			delete workerTable[worker];
-		}, 1000);
+		}, 3000);
 	});
 
 	return { moduleCommand: {command: ["eval"]}, callBack: messageHandler };
