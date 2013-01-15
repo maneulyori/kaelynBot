@@ -9,7 +9,7 @@ process.on('message', function(msg) {
 		out: ""
 	};
 
-	var prefix = "function print(str) { out += str; }";
+	var prefix = "function print(str) { if(typeof(str) == 'string') { out += str; return ;} else { for (var property in str) { out += property + ': ' + str[property] + '; '; }; }; }";
 
 	try{
     	var script = vm.createScript(prefix + ";" + msg);
