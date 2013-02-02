@@ -8,7 +8,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["따라해"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true };
+	return { moduleCommand: { command: ["따라해"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler};
 }
 
 function messageHandler(message)

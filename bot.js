@@ -233,9 +233,14 @@ client.messageCallback(function(message) {
 				}
 			}
 			
-			if(modules[this.i].moduleAPI.isPromisc && message.command == "PRIVMSG")
+			if(typeof(modules[this.i].moduleAPI.promiscCallBack)=="function" && message.command == "PRIVMSG")
 			{
 				modules[this.i].moduleAPI.promiscCallBack(processedMessage);
+			}
+
+			if(typeof(modules[this.i].moduleAPI.rawPromiscCallBack)=="function")
+			{
+				modules[this.i].moduleAPI.rawPromiscCallBack(processedMessage);
 			}
 		}
 		catch (e)

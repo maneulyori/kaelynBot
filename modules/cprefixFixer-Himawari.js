@@ -24,7 +24,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["ECCS"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true };
+	return { moduleCommand: { command: ["ECCS"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler};
 }
 
 function messageHandler(message)

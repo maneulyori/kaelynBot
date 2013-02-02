@@ -19,7 +19,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART", "QUIT", "MODE"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, isPromisc: true, unloadCallback: unload };
+	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART", "QUIT", "MODE"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, unloadCallback: unload };
 }
 
 function getTimestamp(date)

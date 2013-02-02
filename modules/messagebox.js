@@ -9,7 +9,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["부재"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, unloadCallback: unload, isPromisc: true };
+	return { moduleCommand: { command: ["부재"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, unloadCallback: unload};
 }
 
 function messageHandler(message)
@@ -18,6 +18,11 @@ function messageHandler(message)
 }
 
 function promiscMessageHandler(message)
+{
+	//
+}
+
+function unload()
 {
 	//
 }
