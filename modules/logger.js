@@ -19,7 +19,7 @@ function init (initArg)
 {
 	client = initArg.client;
 
-	return { moduleCommand: { command: ["로깅"], IRCcommand: ["KICK", "JOIN", "PART", "QUIT", "MODE"] }, callBack: messageHandler, promiscCallBack: promiscMessageHandler, unloadCallback: unload };
+	return { moduleCommand: { command: ["로깅"] }, callBack: messageHandler, rawPromiscCallBack: promiscMessageHandler, unloadCallback: unload };
 }
 
 function getTimestamp(date)
@@ -27,6 +27,23 @@ function getTimestamp(date)
 	var timestamp = date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10) + ' ' + date.getHours().zeroPad(10) + ':' + date.getMinutes().zeroPad(10) + ':' + date.getSeconds().zeroPad(10);
 
 	return timestamp;
+}
+
+function openLogStream(channel)
+{
+	var date = new Date();
+	var timestamp =  date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10);
+
+	fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
+	channelLogStream[channel].write("Start logging at " + date  + "\n");
+}
+
+function closeLogStream(channel)
+{
+	console.log("Closing log stream: " + channel + "\n");
+	channelLogStream[channel].end("Logging ends at " + new Date() + "\n", "UTF-8");
+
+	delete channelLogStream[channel];
 }
 
 function writeLog(channel, message)
@@ -37,8 +54,7 @@ function writeLog(channel, message)
 	channel = channel.replace(/\//g, "_");
 	if(channelLogStream[channel] == undefined)
 	{
-		channelLogStream[channel] = fs.createWriteStream("logs/" + channel + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
-		channelLogStream[channel].write("Start logging at " + date  + "\n");
+		openLogStream(channel);
 	}
 	channelLogStream[channel].write(timestamp + " " + message + "\r\n", "UTF-8");
 }
@@ -70,9 +86,17 @@ function messageHandler(message)
 			}*/
 		}
 	}
+}
+
+function promiscMessageHandler(message)
+{
+	if(message.command == "PRIVMSG")
+	{
+		writeLog(message.channel, '<' + message.nick + '> ' + message.content);
+	}
 	else if(message.command == "KICK")
 	{
-		writeLog(message.channel, message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")")
+		writeLog(message.channel, message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")");
 	}
 	else if(message.command == "JOIN")
 	{
@@ -87,11 +111,18 @@ function messageHandler(message)
 		modeStr = '';
 
 		for(this.i = 1; this.i <message.args.length; this.i++)
-		{
 			modeStr += message.args[this.i] + ' ';
-		}
 
 		writeLog(message.channel, message.prefix + " Set mode " + modeStr);
+	}
+	else if(message.command == "TOPIC")
+	{
+		writeLog(message.channel, message.prefix + " Set topic " + message.content);
+	}
+	else if(message.command == "NICK")
+	{
+		for(var channel in channelLogStream)
+			writeLog(channel, message.prefix + " Changes nick to " + message.channel);
 	}
 	else if(message.command == "QUIT")
 	{
@@ -102,18 +133,9 @@ function messageHandler(message)
 	}
 }
 
-function promiscMessageHandler(message)
-{
-	writeLog(message.channel, '<' + message.nick + '> ' + message.content);
-}
-
 function unload()
 {
 	console.log("Unloading logger.js\n");
 	for(var channel in channelLogStream)
-	{
-		console.log("Closing log stream: " + channel + "\n");
-		channelLogStream[channel].end("Logging ends at " + new Date() + "\n", "UTF-8");
-	}
+		closeLogStream(channel);
 }
-
