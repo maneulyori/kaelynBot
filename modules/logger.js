@@ -34,7 +34,7 @@ function openLogStream(channel)
 	var date = new Date();
 	var timestamp =  date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10);
 
-	fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
+	channelLogStream[channel] = fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
 	channelLogStream[channel].write("Start logging at " + date  + "\n");
 }
 
