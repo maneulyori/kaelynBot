@@ -6,6 +6,8 @@ process.on('message', function(msg) {
 		dns: require("dns"),
 		url: require("url"),
 		jsdom: require("jsdom"),
+		util: require("util"),
+		os: require("os"),
 		out: ""
 	};
 
