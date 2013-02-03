@@ -14,7 +14,7 @@ function init (initArg)
 
 function messageHandler(message)
 {
-	client.privmsg(message.channel, "메시지 박스 코드 작성 중... 일단 " + client.modifiedNick + "님 부재중으로 설정합니다");
+//	client.privmsg(message.channel, "메시지 박스 코드 작성 중... 일단 " + client.modifiedNick + "님 부재중으로 설정합니다");
 }
 
 function promiscMessageHandler(message)
