@@ -7,6 +7,7 @@ Number.prototype.zeroPad = Number.prototype.zeroPad ||
 var fs = require('fs');
 
 var client;
+var config;
 var channelHT = new Object();
 var channelLogStream = new Object();
 
@@ -18,6 +19,7 @@ var channelBlacklist = ["#!_bin_bash"];
 function init (initArg)
 {
 	client = initArg.client;
+	config = initArg.config;
 
 	return { moduleCommand: { command: ["로깅"] }, callBack: messageHandler, rawPromiscCallBack: promiscMessageHandler, unloadCallback: unload };
 }
@@ -31,7 +33,8 @@ function getTimestamp(date)
 
 function logRotate()
 {
-	//
+	var date = new Date();
+	//for (var channel in 
 }
 
 function openLogStream(channel)
@@ -39,14 +42,19 @@ function openLogStream(channel)
 	var date = new Date();
 	var timestamp =  date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10);
 
-	cannelLogStream[channel] = fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
-	channelLogStream[channel].write("Start logging at " + date  + "\n");
+	channelLogStream[channel] = new Object();
+
+	channelLogStream[channel].stream = fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
+	channelLogStream[channel].date = date;
+
+	channelLogStream[channel].stream.write("Start logging at " + date  + "\n");
+	console.log("Start logging at " + channel);
 }
 
 function closeLogStream(channel)
 {
 	console.log("Closing log stream: " + channel);
-	channelLogStream[channel].end("Logging ends at " + new Date() + "\n", "UTF-8");
+	channelLogStream[channel].stream.end("Logging ends at " + new Date() + "\n", "UTF-8");
 
 	delete channelLogStream[channel];
 }
@@ -61,7 +69,7 @@ function writeLog(channel, message)
 	{
 		openLogStream(channel);
 	}
-	channelLogStream[channel].write(timestamp + " " + message + "\r\n", "UTF-8");
+	channelLogStream[channel].stream.write(timestamp + " " + message + "\r\n", "UTF-8");
 }
 
 function messageHandler(message)
@@ -102,6 +110,8 @@ function promiscMessageHandler(message)
 	else if(message.command == "KICK")
 	{
 		writeLog(message.channel, message.nick + " kicks " + message.args[1] + " (" + message.args[2] + ")");
+		if(message.args[1] == config.nick)
+			closeLogStream(message.channel);
 	}
 	else if(message.command == "JOIN")
 	{
