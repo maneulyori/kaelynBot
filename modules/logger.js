@@ -29,18 +29,23 @@ function getTimestamp(date)
 	return timestamp;
 }
 
+function logRotate()
+{
+	//
+}
+
 function openLogStream(channel)
 {
 	var date = new Date();
 	var timestamp =  date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10);
 
-	channelLogStream[channel] = fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
+	cannelLogStream[channel] = fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
 	channelLogStream[channel].write("Start logging at " + date  + "\n");
 }
 
 function closeLogStream(channel)
 {
-	console.log("Closing log stream: " + channel + "\n");
+	console.log("Closing log stream: " + channel);
 	channelLogStream[channel].end("Logging ends at " + new Date() + "\n", "UTF-8");
 
 	delete channelLogStream[channel];
@@ -135,7 +140,7 @@ function promiscMessageHandler(message)
 
 function unload()
 {
-	console.log("Unloading logger.js\n");
+	console.log("Unloading logger.js");
 	for(var channel in channelLogStream)
 		closeLogStream(channel);
 }
