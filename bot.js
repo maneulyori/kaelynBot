@@ -92,7 +92,7 @@ function modLoader()
 			try {
 				var usermodule = require(modulepath+"/"+modulelist[i]);
 
-				var moduleAPI = usermodule.init({ client: client, moduleAPICall: moduleAPICall, sqlite: sqlite });
+				var moduleAPI = usermodule.init({ client: client, moduleAPICall: moduleAPICall, sqlite: sqlite, config: config });
 	
 				moduleAPI.modName = (moduleAPI.modName || modulelist[i]);
 
