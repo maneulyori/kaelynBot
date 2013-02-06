@@ -14,6 +14,8 @@ cluster.setupMaster({
 	silent : false
 });
 
+var maxMsgLen = 300;
+
 function init (initArg)
 {
 	client = initArg.client;
@@ -28,7 +30,7 @@ function init (initArg)
 			for(var i in msg)
 			{
 				if ( i < 3 ) 
-				client.privmsg(workerTable[worker], msg[i]);
+				client.privmsg(workerTable[worker], msg[i].substring(0, maxMsgLen));
 			}
 
 			worker.destroy(); //Don't leave him hanging 
@@ -36,18 +38,18 @@ function init (initArg)
 		});
 
 		timer = setTimeout( function() {
-			worker.destroy(); //Give it 5 seconds to run, then abort it
+			worker.destroy(); //Give it 1 seconds to run, then abort it
 			client.privmsg(workerTable[worker], "worker timed out");
 			delete workerTable[worker];
-		}, 3000);
+		}, 1000);
 	});
 
-	return { moduleCommand: {command: ["eval"]}, callBack: messageHandler };
+	return { moduleCommand: {command: ["js"]}, callBack: messageHandler };
 }
 
 function messageHandler(message)
 {
-	if(message.moduleCommand == "eval")
+	if(message.moduleCommand == "js")
 	{
 		try {
 			var source = message.content.match(/([^\s]+)\ (.+)/)[2];
@@ -59,7 +61,7 @@ function messageHandler(message)
 		}
 		catch (e)
 		{
-			client.privmsg(message.channel, "eval: 자바스크립트 소스를 실행합니다.");
+			client.privmsg(message.channel, "js: 자바스크립트 소스를 실행합니다.");
 			client.privmsg(message.channel, "사용할 수 있는 모듈에는 dns, url, jsdom, util, os가 있습니다.");
 		}
 	}
