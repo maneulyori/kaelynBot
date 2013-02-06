@@ -8,6 +8,7 @@ var fs = require('fs');
 
 var client;
 var config;
+var rotateTimer;
 var channelHT = new Object();
 var channelLogStream = new Object();
 
@@ -21,6 +22,11 @@ function init (initArg)
 	client = initArg.client;
 	config = initArg.config;
 
+	rotateTimer = setInterval( function () {
+		for (var channel in channelLogStream)
+			logRotate(channel);
+	}, 1000);
+
 	return { moduleCommand: { command: ["로깅"] }, callBack: messageHandler, rawPromiscCallBack: promiscMessageHandler, unloadCallback: unload };
 }
 
@@ -31,10 +37,14 @@ function getTimestamp(date)
 	return timestamp;
 }
 
-function logRotate()
+function logRotate(channel)
 {
 	var date = new Date();
-	//for (var channel in 
+	if(channelLogStream[channel].date.getDate() != date.getDate())
+	{
+		closeLogStream(channel);
+		openLogStream(channel);
+	}
 }
 
 function openLogStream(channel)
@@ -66,9 +76,9 @@ function writeLog(channel, message)
 
 	channel = channel.replace(/\//g, "_");
 	if(channelLogStream[channel] == undefined)
-	{
 		openLogStream(channel);
-	}
+
+	logRotate(channel);
 	channelLogStream[channel].stream.write(timestamp + " " + message + "\r\n", "UTF-8");
 }
 
@@ -151,6 +161,9 @@ function promiscMessageHandler(message)
 function unload()
 {
 	console.log("Unloading logger.js");
+
+	clearInterval(rotateTimer);
+
 	for(var channel in channelLogStream)
 		closeLogStream(channel);
 }
