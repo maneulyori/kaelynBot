@@ -156,8 +156,8 @@ client.messageCallback(function(message) {
 		if(((processedMessage.args[1] || '').startsWith(config.commandPrefix)) || (processedMessage.args[1] || '').startsWith('!'))
 		{
 			processedMessage.isCommand = true;
-			processedMessage.args[1] = (message.args[1] || '').substring(config.commandPrefix.length, (message.args[1] || '').length);
-			processedMessage.splitedMessage = processedMessage.args[1].split(" ");
+			processedMessage.command = (message.args[1] || '').substring(config.commandPrefix.length, (message.args[1] || '').length);
+			processedMessage.splitedMessage = processedMessage.command.split(" ");
 			processedMessage.moduleCommand = processedMessage.splitedMessage[0];
 		}
 	}
