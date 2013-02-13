@@ -22,7 +22,7 @@ function messageHandler(message)
 
 		var diceResult = moduleAPICall("dice.js", "diceRoller", diceString[2]);
 
-		client.privmsg (message.args[0], "TOTAL: "+diceResult.total);
-		client.privmsg (message.args[0], "Rolls: "+diceResult.rolls);
+		client.privmsg (message.channel, "TOTAL: "+diceResult.total);
+		client.privmsg (message.channel, "Rolls: "+diceResult.rolls);
 	}
 }

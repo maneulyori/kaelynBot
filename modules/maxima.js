@@ -21,14 +21,14 @@ function messageHandler(message)
 	{
 		if(message.splitedMessage[1] == "재시동")
 		{
-			client.privmsg(message.args[0], "Restarting maxima process...");
+			client.privmsg(message.channel, "Restarting maxima process...");
 			maxima.kill('SIGKILL');
 			maxima = spawn('maxima', []);
-			client.privmsg(message.args[0], "Restarting finished.");
+			client.privmsg(message.channel, "Restarting finished.");
 		}
 
 
-		client.privmsg (message.args[0], "Placeholder!");
+		client.privmsg (message.channel, "Placeholder!");
 	}
 }
 

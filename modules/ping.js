@@ -14,10 +14,10 @@ function messageHandler(message)
 {
 	if(message.splitedMessage[0] == "핑")
 	{
-		client.privmsg (message.args[0], message.nick + ", 퐁!");
+		client.privmsg (message.channel, message.nick + ", 퐁!");
 	}
 	else if(message.splitedMessage[0] == "퐁")
 	{
-		client.privmsg(message.args[0], "E: 시간 역행 탐지됨.");
+		client.privmsg(message.channel, message.nick + ", 핑!... 어라 이상한데?");
 	}
 }
