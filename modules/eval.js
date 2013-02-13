@@ -16,6 +16,10 @@ cluster.setupMaster({
 
 var maxMsgLen = 300;
 
+String.prototype.startsWith = function(prefix) {
+    return this.indexOf(prefix) === 0;
+}
+
 function init (initArg)
 {
 	client = initArg.client;
@@ -49,6 +53,7 @@ function init (initArg)
 
 function messageHandler(message)
 {
+	if(message.args[1].startsWith('$'))
 	if(message.moduleCommand == "js")
 	{
 		try {
