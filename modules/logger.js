@@ -52,9 +52,26 @@ function openLogStream(channel)
 	var date = new Date();
 	var timestamp =  date.getFullYear().zeroPad(1000) + '-' + (date.getMonth()+1).zeroPad(10) + '-' + date.getDate().zeroPad(10);
 
+	var stats;
+	var dirIsNotExist = false;
+
+	try
+	{	
+		stats = fs.lstatSync("logs/" + channel);
+	}
+	catch (e)
+	{
+		dirIsNotExist = true;
+	}
+	
+	if(dirIsNotExist)
+	{
+		fs.mkdirSync("logs/" + channel, 0777);
+	}
+
 	channelLogStream[channel] = new Object();
 
-	channelLogStream[channel].stream = fs.createWriteStream("logs/" + channel + "-" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
+	channelLogStream[channel].stream = fs.createWriteStream("logs/" + channel + "/" + timestamp + ".log", { flags: "a", encoding: "UTF-8", mode: 0666});
 	channelLogStream[channel].date = date;
 
 	channelLogStream[channel].stream.write("Start logging at " + date  + "\n");
