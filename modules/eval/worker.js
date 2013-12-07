@@ -14,6 +14,7 @@ process.on('message', function(msg) {
 	var prefix = "function print(str) { if(typeof(str) == 'string') { out += str; return ;} else { for (var property in str) { out += property + ': ' + str[property] + '; '; }; }; }";
 
 	try{
+	console.log("Executing script\n");
     	var script = vm.createScript(prefix + ";" + msg);
     	script.runInNewContext(sandbox);
 	}
