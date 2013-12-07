@@ -1,6 +1,5 @@
 var irc = require('./irc.js');
 var fs = require('fs');
-var sqlite = require('sqlite3');
 var tls = require('tls');
 
 var modules = new Array();
@@ -92,7 +91,7 @@ function modLoader()
 			try {
 				var usermodule = require(modulepath+"/"+modulelist[i]);
 
-				var moduleAPI = usermodule.init({ client: client, moduleAPICall: moduleAPICall, sqlite: sqlite, config: config });
+				var moduleAPI = usermodule.init({ client: client, moduleAPICall: moduleAPICall, config: config });
 	
 				moduleAPI.modName = (moduleAPI.modName || modulelist[i]);
 
